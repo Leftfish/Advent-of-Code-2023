@@ -32,8 +32,8 @@ def get_values_alternative(line):
             'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9'}
     regex = r'one|two|three|four|five|six|seven|eight|nine'
 
-    first = re.findall(regex + '|\d', line)[0]
-    last = re.findall(regex[::-1] + '|\d', line[::-1])[0][::-1]
+    first = re.search(regex + '|\d', line)[0]
+    last = re.search(regex[::-1] + '|\d', line[::-1])[0][::-1]
 
     return int(''.join([token if token.isdigit() else digits[token] for token in [first, last]]))
 
