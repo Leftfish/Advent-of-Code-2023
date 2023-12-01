@@ -9,4 +9,4 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
-* [Day 1 Python](01/d01.py): who knows...
+* [Day 1 Python](01/d01.py): debugging off-by-one errors (**I**) and iterating with two pointers (**RR**)
