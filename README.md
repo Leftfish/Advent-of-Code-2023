@@ -11,3 +11,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
 * [Day 1 Python](01/d01.py): debugging off-by-one errors (**I**), iterating with two pointers (**R**) and re.findall & re.search (**R**), because I procrastrinated by implementing this one with two methods
 * [Day 2 Python](02/d02.py): itertools.chain (**L**)
+* [Day 3 Python](03/d03.py): set operations (**R**), first steps with Pylint (**L**)
