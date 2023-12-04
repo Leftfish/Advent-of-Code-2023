@@ -18,6 +18,7 @@ def parse_cards(lines: str) -> Dict[int, Dict[str, int]]:
 
         card['matching'] = matching if matching >= 1 else 0
         card['quantity'] = 1
+        card['makes_copies_of'] = [card_id + i for i in range(1, card['matching'] + 1)]
 
         cards[card_id] = card
 
@@ -29,8 +30,7 @@ def make_copies(cards: Dict[int, Dict[str, int]]) -> Dict[int, Dict[str, int]]:
     with N subsequent ids where N is the number of winning (matching) numbers'''
     for card_id in cards:
         for _ in range(cards[card_id]['quantity']):
-            new_copies_ids = [card_id + i for i in range(1, cards[card_id]['matching'] + 1)]
-            for new_copy_id in new_copies_ids:
+            for new_copy_id in cards[card_id]['makes_copies_of']:
                 cards[new_copy_id]['quantity'] += 1
     return cards
 
