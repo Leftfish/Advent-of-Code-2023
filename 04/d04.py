@@ -29,9 +29,8 @@ def make_copies(cards: Dict[int, Dict[str, int]]) -> Dict[int, Dict[str, int]]:
     '''Iterates over the cards and for each instance of each cards, generates the copies of cards
     with N subsequent ids where N is the number of winning (matching) numbers'''
     for card_id in cards:
-        for _ in range(cards[card_id]['quantity']):
-            for new_copy_id in cards[card_id]['makes_copies_of']:
-                cards[new_copy_id]['quantity'] += 1
+        for new_copy_id in cards[card_id]['makes_copies_of']:
+            cards[new_copy_id]['quantity'] += cards[card_id]['quantity']
     return cards
 
 
