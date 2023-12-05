@@ -3,6 +3,7 @@ print('Day 5 of Advent of Code!')
 def get_single_seeds(lines):
     return [int(seed) for seed in lines[0].split(': ')[1].split()]
 
+
 def get_seed_ranges(lines):
     all_ranges = lines[0].split(': ')[1].split()
     seed_ranges = []
@@ -10,6 +11,7 @@ def get_seed_ranges(lines):
         seed_from, seed_to = int(all_ranges[i]), int(all_ranges[i+1])
         seed_ranges.append((seed_from, seed_to))
     return seed_ranges
+
 
 def get_map(lines, map_id):
     data = lines[map_id]
@@ -35,22 +37,59 @@ def map_numbers(current, map_of_ranges):
     range_id = get_seed_range_id(current, map_of_ranges)
     if range_id == -1:
         return current
-    else:
-        destination, source, _ = map_of_ranges[range_id]
-        delta = destination - source
-        updated = current + delta
-        return updated
+
+    destination, source, _ = map_of_ranges[range_id]
+    delta = destination - source
+
+    return current + delta
+
 
 def find_smallest(full_data):
     seeds = get_single_seeds(full_data)
     all_maps = get_maps(full_data)
     minimum = -1
+
     for current in seeds:
         for sth_to_sth in all_maps:
             current = map_numbers(current, sth_to_sth)
         if minimum == -1 or current < minimum:
             minimum = current
-    print(minimum)
+
+    return minimum
+
+
+def hacky_find_smallest_in_range(rng, all_maps, step):
+    minimum = (-1, -1)
+    for current in range(rng[0], rng[0]+rng[1], step):
+        tested_seed = current
+        for sth_to_sth in all_maps:
+            current = map_numbers(current, sth_to_sth)
+        if minimum[0] == -1 or current < minimum[0]:
+            minimum = (current, tested_seed)
+    return minimum
+
+
+def hacky_hacky_find_smallest_in_ranges(full_data):
+    seed_ranges = get_seed_ranges(full_data)
+    all_maps = get_maps(full_data)
+    minimum = -1
+
+    step = 100_000_000
+    stop_step = 10_000
+
+    while step >= stop_step:
+        for rng in seed_ranges:
+            range_minimum = hacky_find_smallest_in_range(rng, all_maps, step)
+            if minimum == -1 or range_minimum < minimum:
+                minimum = range_minimum
+        candidate_range = (minimum[1] - step, step * 10)
+        seed_ranges = [candidate_range]
+        step //= 10
+
+    final_candidate = (seed_ranges[0][0] - step, step * 10)
+
+    return hacky_find_smallest_in_range(final_candidate, all_maps, 1)[0]
+
 
 TEST_DATA = '''seeds: 79 14 55 13
 
@@ -88,32 +127,11 @@ humidity-to-location map:
 
 print('Testing...')
 test_maps = TEST_DATA.split('\n\n')
-
-def find_smallest_in_ranges(full_data):
-    seed_ranges = get_seed_ranges(full_data)
-    all_maps = get_maps(full_data)
-    minimum = -1
-
-    start = 3205462501 - 100
-    rng = 1000
-    
-    for rng in [(start, 243224070)]:
-    #for rng in seed_ranges:
-        print('----------------')
-        for current in range(rng[0], rng[0]+rng[1], 1):
-            a = current
-            for sth_to_sth in all_maps:
-                current = map_numbers(current, sth_to_sth)
-            if minimum == -1 or current < minimum:
-                minimum = current
-                print(f'{rng} ...ends at {current} from {a}')
-
-find_smallest(test_maps)
-#find_smallest_in_ranges(test_maps)
+print('Part 1:', find_smallest(test_maps) == 35)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
 
     actual_maps = inp.read().split('\n\n')
-    find_smallest(actual_maps)
-    find_smallest_in_ranges(actual_maps)
+    print('Part 1:', find_smallest(actual_maps))
+    print('Part 2:', hacky_hacky_find_smallest_in_ranges(actual_maps))
