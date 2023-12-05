@@ -5,8 +5,11 @@ def get_single_seeds(lines):
 
 def get_seed_ranges(lines):
     all_ranges = lines[0].split(': ')[1].split()
+    seed_ranges = []
     for i in range(0, len(all_ranges)-1, 2):
-        print(all_ranges[i], all_ranges[i+1])
+        seed_from, seed_to = int(all_ranges[i]), int(all_ranges[i+1])
+        seed_ranges.append((seed_from, seed_to))
+    return seed_ranges
 
 def get_map(lines, map_id):
     data = lines[map_id]
@@ -38,12 +41,10 @@ def map_numbers(current, map_of_ranges):
         updated = current + delta
         return updated
 
-
 def find_smallest(full_data):
     seeds = get_single_seeds(full_data)
     all_maps = get_maps(full_data)
     minimum = -1
-
     for current in seeds:
         for sth_to_sth in all_maps:
             current = map_numbers(current, sth_to_sth)
@@ -87,12 +88,32 @@ humidity-to-location map:
 
 print('Testing...')
 test_maps = TEST_DATA.split('\n\n')
-get_seed_ranges(test_maps)
-find_smallest(test_maps)
 
-with open('inp', mode='r', encoding='utf8') as inp:
+def find_smallest_in_ranges(full_data):
+    seed_ranges = get_seed_ranges(full_data)
+    all_maps = get_maps(full_data)
+    minimum = -1
+
+    start = 3205462501 - 100
+    rng = 1000
+    
+    for rng in [(start, 243224070)]:
+    #for rng in seed_ranges:
+        print('----------------')
+        for current in range(rng[0], rng[0]+rng[1], 1):
+            a = current
+            for sth_to_sth in all_maps:
+                current = map_numbers(current, sth_to_sth)
+            if minimum == -1 or current < minimum:
+                minimum = current
+                print(f'{rng} ...ends at {current} from {a}')
+
+find_smallest(test_maps)
+#find_smallest_in_ranges(test_maps)
+
+with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
 
     actual_maps = inp.read().split('\n\n')
     find_smallest(actual_maps)
-    get_seed_ranges(actual_maps)
+    find_smallest_in_ranges(actual_maps)
