@@ -69,7 +69,7 @@ def hacky_find_smallest_in_range(rng, all_maps, step):
     return minimum
 
 
-def hacky_hacky_find_smallest_in_ranges(full_data):
+def hacky_find_smallest_in_ranges(full_data):
     seed_ranges = get_seed_ranges(full_data)
     all_maps = get_maps(full_data)
     minimum = -1
@@ -128,10 +128,11 @@ humidity-to-location map:
 print('Testing...')
 test_maps = TEST_DATA.split('\n\n')
 print('Part 1:', find_smallest(test_maps) == 35)
+print('Part 2 only works for production data because it is so ugly.')
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
 
     actual_maps = inp.read().split('\n\n')
     print('Part 1:', find_smallest(actual_maps))
-    print('Part 2:', hacky_hacky_find_smallest_in_ranges(actual_maps))
+    print('Part 2:', hacky_find_smallest_in_ranges(actual_maps))
