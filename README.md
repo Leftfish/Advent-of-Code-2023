@@ -13,4 +13,5 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 2 Python](02/d02.py): itertools.chain (**L**)
 * [Day 3 Python](03/d03.py): set operations (**R**), first steps with Pylint (**L**)
 * [Day 4 Python](04/d04.py): using dictionaries of dictionaries to store data (**R**)
-* [Day 5 Python](05/d05.py): using Python as a hand calculator, really...
+* [Day 5 Python](05/d05.py): using Python as a hand calculator, really...and finding overlaps of intervals in my not-yet-implemented alternative solution (**R**)
+* [Day 6 Python](06/d06.py): implementing quadratic equations (**R**)

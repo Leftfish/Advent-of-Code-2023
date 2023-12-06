@@ -6,10 +6,18 @@ print('Day 6 of Advent of Code!')
 
 def parse_without_kerning(data):
     times, distances = data.split('\n')
-    race_times = [int(race_time) for race_time in list(re.findall('\d+', times))]
-    race_distances = [int(race_distance) for race_distance in list(re.findall('\d+', distances))]
+    race_times = [int(race_time) for race_time in list(re.findall(r'\d+', times))]
+    race_distances = [int(race_distance) for race_distance in list(re.findall(r'\d+', distances))]
 
     return zip(race_times, race_distances)
+
+
+def parse_with_kerning(data):
+    times, distances = data.split('\n')
+    race_times = "".join(list(re.findall(r'\d+', times)))
+    race_distances = "".join(list(re.findall(r'\d+', distances)))
+
+    return int(race_times), int(race_distances)
 
 
 def solve_race(race):
@@ -35,15 +43,21 @@ def solve_multiple_races(data):
         acc *= solve_race(race)
     return acc
 
+
+def solve_one_race(data):
+    race = parse_with_kerning(data)
+    print(solve_one_race(race))
+
+
 TEST_DATA = '''Time:      7  15   30
 Distance:  9  40  200'''
 
 print('Testing...')
-print(solve_multiple_races(TEST_DATA))
+print('Part 1:', solve_multiple_races(TEST_DATA) == 288)
+print('Part 2:', solve_race(parse_with_kerning(TEST_DATA)) == 71503)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
-    print(solve_multiple_races(actual_data))
-
-    
+    print('Part 1:', solve_multiple_races(actual_data))
+    print('Part 2:', solve_race(parse_with_kerning(actual_data)))
