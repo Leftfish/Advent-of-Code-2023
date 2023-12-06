@@ -37,20 +37,15 @@ def solve_race(race):
 
 
 def solve_multiple_races(data):
-    races = parse_without_kerning(data)
     acc = 1
-    for race in races:
+    for race in parse_without_kerning(data):
         acc *= solve_race(race)
     return acc
 
 
-def solve_one_race(data):
-    race = parse_with_kerning(data)
-    print(solve_one_race(race))
-
-
 TEST_DATA = '''Time:      7  15   30
 Distance:  9  40  200'''
+
 
 print('Testing...')
 print('Part 1:', solve_multiple_races(TEST_DATA) == 288)
