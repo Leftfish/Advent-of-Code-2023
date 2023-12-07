@@ -7,7 +7,15 @@ CARDS_JOKER = 'AKQT98765432J'
 CARD_POINTS = range(len(CARDS), 0, -1)
 JOKER = 'J'
 STANDARD_SCORES = dict(zip(CARDS, CARD_POINTS))
-JOKER_SCORES = {card: score for card, score in zip(CARDS_JOKER, CARD_POINTS)}
+JOKER_SCORES = dict(zip(CARDS_JOKER, CARD_POINTS))
+
+FIVE_OF_A_KIND = 7
+FOUR_OF_A_KIND = 6
+FULL_HOUSE = 5
+THREE = 4
+TWO_PAIRS = 3
+PAIR = 2
+HIGH_CARD = 1
 
 
 class Hand:
@@ -38,84 +46,89 @@ class Hand:
         values = card_count.values()
 
         if max(values) == 5:
-            # five XXXXX
-            hand_score = 7
+            # AAAAA
+            return FIVE_OF_A_KIND
         elif max(values) == 4:
-            # four XXXXY
-            hand_score = 6
+            # AAAAQ
+            return FOUR_OF_A_KIND
         elif max(values) == 3 and len(card_count) == 2:
-            # full XXXZZ
-            hand_score = 5
+            # AAAQQ
+            return FULL_HOUSE
         elif max(values) == 3 and len(card_count) == 3:
-            # three XXXYZ
-            hand_score = 4
+            # AAAQ2
+            return THREE
         elif max(values) == 2 and len(card_count) == 3:
-            # two pairs XXPPZ
-            hand_score = 3
+            # AAKK2
+            return TWO_PAIRS
         elif max(values) == 2 and len(card_count) == 4:
-            # one pair XXPZU
-            hand_score = 2
+            # AAKQ2
+            return PAIR
         else:
-            # high card 34567
-            hand_score = 1
-
-        return hand_score
+            # 34A6K
+            return HIGH_CARD
 
 
     def __score_hand_joker(self):
         card_count = Counter(self.cards)
         values = card_count.values()
+        joker_present = JOKER in card_count
 
-        if 5 in values or (4 in values and JOKER in card_count):
-            # XXXXX JJJJJ XJJJJ JJJJX XXXXJ five with/without joker
-            hand_score = 7
-        elif 3 in values and 2 in values and JOKER in card_count:
-            # JJJXX XXXJJ five with joker
-            hand_score = 7
-        elif 4 in values or (3 in values and card_count[JOKER] == 1):
-            # XXXXY XXXJY four or three plus joker = four
-            hand_score = 6
+        if 5 in values:
+            # XXXXX JJJJJ
+            return FIVE_OF_A_KIND
+        elif 4 in values and joker_present:
+            # XJJJJ JJJJX XXXXJ four plus joker
+            return FIVE_OF_A_KIND
+        elif 3 in values and 2 in values and joker_present:
+            # JJJXX XXXJJ three plus two jokers or three jokers plus pair
+            return FIVE_OF_A_KIND
+        elif 4 in values:
+            # XXXXY four
+            return FOUR_OF_A_KIND
+        elif 3 in values and card_count[JOKER] == 1:
+            # XXXJY three plus joker
+            return FOUR_OF_A_KIND
         elif card_count[JOKER] == 3 and len(card_count) == 3:
-            # JJJXY three jokers plus anything = four
-            hand_score = 6
+            # JJJXY three jokers plus anything
+            return FOUR_OF_A_KIND
         elif card_count[JOKER] == 2 and len(card_count) == 3:
-            # JJXXY two pairs with two jokers = four
-            hand_score = 6
-        elif 3 in values and 2 in values and JOKER not in card_count:
+            # JJXXY two pairs with two jokers
+            return FOUR_OF_A_KIND
+        elif max(values) == 3 and len(card_count) == 2 and not joker_present:
             # XXXYY full
-            hand_score = 5
+            return FULL_HOUSE
         elif card_count[JOKER] == 1 and len(card_count) == 3:
-            # XXYYJ two pairs + joker = full
-            hand_score = 5
-        elif max(values) == 3 and len(card_count) == 3 and JOKER not in card_count:
+            # XXYYJ two pairs + joker
+            return FULL_HOUSE
+        elif max(values) == 3 and len(card_count) == 3 and not joker_present:
             # XXXAB three
-            hand_score = 4
-        elif max(values) == 2 and len(card_count) == 4 and JOKER in card_count:
-            # XXABJ pair + joker = three
-            hand_score = 4
+            return THREE
+        elif max(values) == 2 and len(card_count) == 4 and joker_present:
+            # XXABJ pair + joker
+            return THREE
         elif card_count[JOKER] == 2 and len(card_count) == 4:
-            ## JJXYZ pair of jokers and nothing else = three
-            hand_score = 4
-        elif max(values) == 2 and len(card_count) == 3  and JOKER not in card_count:
+            ## JJXYZ pair of jokers
+            return THREE
+        elif max(values) == 2 and len(card_count) == 3 and not joker_present:
             # XXYYZ two pairs
-            hand_score = 3
-        elif max(values) == 2 and len(card_count) == 4 and JOKER not in card_count:
+            return TWO_PAIRS
+        elif max(values) == 2 and len(card_count) == 4 and not joker_present:
             # XXABC one pair
-            hand_score = 2
-        elif len(values) == 5 and JOKER in card_count:
-            # ABCDJ high card + joker = pair
-            hand_score = 2
+            return PAIR
+        elif len(values) == 5 and joker_present:
+            # ABCDJ high card + joker
+            return PAIR
         else:
-            hand_score = 1
+            return HIGH_CARD
 
-        return hand_score
 
-def get_hands_to_bids(data, joker_active):
+def solve(data, joker_active):
     hands_to_bids = {}
-    for line in data:
+    for line in data.splitlines():
         cards, bid = line.split()
         hands_to_bids[Hand(cards, joker_active)] = int(bid)
-    return hands_to_bids
+    sorted_hands = enumerate(sorted(hands_to_bids.keys()), 1)
+    return sum((hands_to_bids[hand] * score for score, hand in sorted_hands))
 
 TEST_DATA = '''32T3K 765
 T55J5 684
@@ -124,15 +137,11 @@ KTJJT 220
 QQQJA 483'''
 
 print('Testing...')
-test_without_J = get_hands_to_bids(TEST_DATA.splitlines(), joker_active=False)
-print('Part 1:', sum((test_without_J[hand] * score for score, hand in enumerate(sorted(test_without_J.keys()), 1))) == 6440)
-test_with_J = get_hands_to_bids(TEST_DATA.splitlines(), joker_active=True)
-print('Part 2:', sum((test_with_J[hand] * score for score, hand in enumerate(sorted(test_with_J.keys()), 1))) == 5905)
+print('Part 1:', solve(TEST_DATA, joker_active=False) == 6440)
+print('Part 2:', solve(TEST_DATA, joker_active=True) == 5905)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
-    actual_data = inp.readlines()
-    actual_without_J = get_hands_to_bids(actual_data, joker_active=False)
-    print('Part 1:', sum((actual_without_J[hand] * score for score, hand in enumerate(sorted(actual_without_J.keys()), 1))))
-    actual_with_J = get_hands_to_bids(actual_data, joker_active=True)
-    print('Part 2:', sum((actual_with_J[hand] * score for score, hand in enumerate(sorted(actual_with_J.keys()), 1))))
+    actual_data = inp.read()
+    print('Part 1:', solve(actual_data, joker_active=False))
+    print('Part 2:', solve(actual_data, joker_active=True))
