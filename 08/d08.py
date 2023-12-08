@@ -44,7 +44,6 @@ def steps_human(instructions, nodes):
 
 
 def find_one_cycle(instructions, node, nodes):
-    repeats = 0
     steps = 0
     current = node
 
@@ -53,11 +52,7 @@ def find_one_cycle(instructions, node, nodes):
         steps += 1
 
         if is_end(current):
-            repeats += 1
-
-        if repeats >= 2:
-            return int(steps / 2)
-
+            return steps
 
 def find_cycles(instructions, start_nodes, nodes):
     return [find_one_cycle(instructions, node, nodes) for node in start_nodes]
