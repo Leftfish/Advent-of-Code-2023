@@ -1,5 +1,5 @@
 from itertools import cycle
-from math import gcd
+from math import lcm
 
 print('Day 8 of Advent of Code!')
 
@@ -63,13 +63,6 @@ def find_cycles(instructions, start_nodes, nodes):
     return [find_one_cycle(instructions, node, nodes) for node in start_nodes]
 
 
-def calculate_lcm(lst):
-    lcm = 1
-    for val in lst:
-        lcm = lcm * val // gcd(lcm, val )
-    return lcm
-
-
 TEST_DATA = '''RL
 
 AAA = (BBB, CCC)
@@ -97,7 +90,7 @@ parsed_instructions, parsed_nodes = get_nodes_and_instructions(TEST_DATA)
 print('Part 1:', steps_human(*get_nodes_and_instructions(TEST_DATA)) == 2)
 parsed_instructions, parsed_nodes = get_nodes_and_instructions(TEST_DATA2)
 current_nodes = [node for node in parsed_nodes if is_start(node)]
-print('Part 2:', calculate_lcm(find_cycles(parsed_instructions, current_nodes, parsed_nodes)) == 6)
+print('Part 2:', lcm(*find_cycles(parsed_instructions, current_nodes, parsed_nodes)) == 6)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
@@ -105,4 +98,4 @@ with open('inp', mode='r', encoding='utf-8') as inp:
     print('Part 1:', steps_human(*get_nodes_and_instructions(actual_data)))
     parsed_instructions, parsed_nodes = get_nodes_and_instructions(actual_data)
     current_nodes = [node for node in parsed_nodes if is_start(node)]
-    print('Part 2:', calculate_lcm(find_cycles(parsed_instructions, current_nodes, parsed_nodes)))
+    print('Part 2:', lcm(*find_cycles(parsed_instructions, current_nodes, parsed_nodes)))
