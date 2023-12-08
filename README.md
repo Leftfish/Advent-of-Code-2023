@@ -16,3 +16,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 5 Python](05/d05.py): using Python as a hand calculator, really...and finding overlaps of intervals in my not-yet-implemented alternative solution (**R**)
 * [Day 6 Python](06/d06.py): implementing quadratic equations (**R**)
 * [Day 7 Python](07/d07.py): Collections.Counter (**R**), creating hashable objects and with custom comparators (**R**), reading comprehension (**OMG**)
+* [Day 8 Python](08/d08.py): LCM of lists of integers (**R**) and itertools.cycle (**R**)
