@@ -9,7 +9,7 @@ def get_sequences(data):
 
 def update_sequence(sequence):
     updated = [sequence]
-    while sum(sequence) != 0:
+    while any(sequence):
         sequence = deque([sequence[i+1] - sequence[i] for i in range(0, len(sequence)-1)])
         updated.append(sequence)
     return updated
