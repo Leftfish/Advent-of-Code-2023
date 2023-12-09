@@ -82,13 +82,13 @@ print('Testing...')
 parsed_instructions, parsed_nodes = get_nodes_and_instructions(TEST_DATA)
 print('Part 1:', find_steps_human(*get_nodes_and_instructions(TEST_DATA)) == 2)
 parsed_instructions, parsed_nodes = get_nodes_and_instructions(TEST_DATA2)
-current_nodes = [node for node in parsed_nodes if is_start(node)]
-print('Part 2:', find_steps_ghost(parsed_instructions, current_nodes, parsed_nodes) == 6)
+starting_nodes = [node for node in parsed_nodes if is_start(node)]
+print('Part 2:', find_steps_ghost(parsed_instructions, starting_nodes, parsed_nodes) == 6)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
     print('Part 1:', find_steps_human(*get_nodes_and_instructions(actual_data)))
     parsed_instructions, parsed_nodes = get_nodes_and_instructions(actual_data)
-    current_nodes = [node for node in parsed_nodes if is_start(node)]
-    print('Part 2:', find_steps_ghost(parsed_instructions, current_nodes, parsed_nodes))
+    starting_nodes = [node for node in parsed_nodes if is_start(node)]
+    print('Part 2:', find_steps_ghost(parsed_instructions, starting_nodes, parsed_nodes))
