@@ -7,6 +7,8 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
+Day 10 part 2 was the first real challenge and a learning experience. A visualisation on the AoC subreddit pointed me towards the proper algorithm.
+
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
 * [Day 1 Python](01/d01.py): debugging off-by-one errors (**I**), iterating with two pointers (**R**) and re.findall & re.search (**R**), because I procrastrinated by implementing this one with two methods
