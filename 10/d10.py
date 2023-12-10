@@ -29,6 +29,7 @@ MOVES = {VERTICAL: {TOP: (VERTICAL, SOUTHEAST, SOUTHWEST, START),
                  DOWN: (VERTICAL, NORTHWEST, NORTHEAST),
                  RIGHT: (HORIZONTAL, SOUTHWEST, NORTHWEST)}}
 
+FLOOD_TABLE = {VERTICAL, START, NORTHEAST, NORTHWEST}
 
 class Pipes:
     def __init__(self, data) -> None:
@@ -73,21 +74,22 @@ class Animal:
         current = self.pipes.schematic[self.i][self.j]
         candidates = []
 
-        if TOP in MOVES[current] and 0 < self.i and\
-            self.pipes.schematic[self.i-1][self.j] in MOVES[current][TOP]:
+        if TOP in MOVES[current] and \
+        self.pipes.schematic[self.i-1][self.j] in MOVES[current][TOP]:
             candidates.append((self.i-1, self.j))
 
-        if DOWN in MOVES[current] and self.i < self.pipes.width -2 and\
+        if DOWN in MOVES[current] and \
             self.pipes.schematic[self.i+1][self.j] in MOVES[current][DOWN]:
             candidates.append((self.i+1, self.j))
 
-        if LEFT in MOVES[current] and 0 < self.j and \
+        if LEFT in MOVES[current] and \
             self.pipes.schematic[self.i][self.j-1] in MOVES[current][LEFT]:
             candidates.append((self.i, self.j-1))
 
-        if RIGHT in MOVES[current] and self.j < self.pipes.length -2 and \
+        if RIGHT in MOVES[current] and \
             self.pipes.schematic[self.i][self.j+1] in MOVES[current][RIGHT]:
             candidates.append((self.i, self.j+1))
+
         return candidates
 
 
@@ -98,20 +100,47 @@ class Animal:
                 and self.pipes.schematic[move[0]][move[1]] == START:
                 return move
 
+
     def move(self):
         next_position = self.get_next_move()
         self.i, self.j = next_position
         self.visited.add(next_position)
         self.update_steps()
 
+
     def update_steps(self):
         self.steps += 1
-        if (self.i, self.j) == self.pipes.start:
-            self.loop = self.steps // 2
+
 
 def move_in_loop(animal):
-    while animal.get_next_move():
+    while True:
+        move = animal.get_next_move()
+        if not move:
+            break
         animal.move()
+
+
+def draw_loop(animal, pipes):
+    new_loop = [[char for char in line] for line in pipes.schematic]
+    for i in range(pipes.length):
+        for j in range(pipes.width):
+            if (i, j) not in animal.visited:
+                new_loop[i][j] = '.'
+    return new_loop
+
+
+def count_enclosed(animal, pipes):
+    counter = 0
+    for line in draw_loop(animal, pipes):
+        for i in range(len(line)):
+            if line[i] == GROUND:
+                intersections = 0
+                for j in range(i+1, len(line)):
+                    if line[j] in FLOOD_TABLE:
+                        intersections += 1
+                if intersections % 2:
+                    counter += 1
+    return counter
 
 TEST_DATA = '''-L|F7
 7S-7|
@@ -123,12 +152,15 @@ print('Testing...')
 test_pipes = Pipes(TEST_DATA)
 lab_rat = Animal(*test_pipes.start, test_pipes)
 move_in_loop(lab_rat)
-print('Part 1:', lab_rat.loop == 4)
+print('Part 1:', len(lab_rat.visited) // 2 == 4)
+print('Part 2 still gives off-by-one error for test data - no idea why.')
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
-    actual_pipes = Pipes(actual_data)
-    proper_rat = Animal(*actual_pipes.start, actual_pipes)
-    move_in_loop(proper_rat)
-    print('Part 1:', proper_rat.loop)
+
+actual_pipes = Pipes(actual_data)
+proper_rat = Animal(*actual_pipes.start, actual_pipes)
+move_in_loop(proper_rat)
+print('Part 1:', len(proper_rat.visited) // 2)
+print('Part 2:', count_enclosed(proper_rat, actual_pipes))

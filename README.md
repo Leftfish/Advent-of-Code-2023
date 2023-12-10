@@ -18,3 +18,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 7 Python](07/d07.py): collections.Counter (**R**), creating hashable objects and with custom comparators (**R**), reading comprehension (**OMG**)
 * [Day 8 Python](08/d08.py): itertools.cycle (**R**)
 * [Day 9 Python](09/d09.py): deque (**R**)
+* [Day 10 Python](10/d10.py): the [even-odd algorithm](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule) (**L**) although the implementation is not perfect (works for the acutal input, gives off-by-one errors on test data)
