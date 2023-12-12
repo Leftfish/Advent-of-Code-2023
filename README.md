@@ -7,7 +7,7 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-Day 10 part 2 was the first real challenge and a learning experience. A visualisation on the AoC subreddit pointed me towards the proper algorithm.
+Day 10 part 2 was the first real challenge and a learning experience. A visualisation on the AoC subreddit pointed me towards the proper algorithm. Day 12 part 2 is another and I haven't solved it yet.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -22,3 +22,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 9 Python](09/d09.py): deque (**R**)
 * [Day 10 Python](10/d10.py): the [even-odd algorithm](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule) (**L**) although the implementation is not perfect (works for the acutal input, gives off-by-one errors on test data)
 * [Day 11 Python](11/d11.py): deepcopy (**R**), itertools.combinations (**R**), Manhattan distance (**R**)
+* [Day 12 Python](12/d12.py) recursion (**R**) for an ugly brute-force solution of part 1, part 2 TO DO
