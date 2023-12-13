@@ -23,3 +23,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 10 Python](10/d10.py): the [even-odd algorithm](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule) (**L**) although the implementation is not perfect (works for the acutal input, gives off-by-one errors on test data)
 * [Day 11 Python](11/d11.py): deepcopy (**R**), itertools.combinations (**R**), Manhattan distance (**R**)
 * [Day 12 Python](12/d12.py) recursion (**R**) for an ugly brute-force solution of part 1, part 2 TO DO
+* [Day 13 Python](13/d13.py) hash() (**R**), part 2 TO DO because hash() turned out to be a wrong design choice...
