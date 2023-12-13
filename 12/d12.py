@@ -25,7 +25,6 @@ def count_hashes(line):
         counts.append(len(series))
     return counts
 
-
 def generate_patterns(pattern, current_pattern='', index=0):
     result = []
 
