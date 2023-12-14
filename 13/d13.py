@@ -9,6 +9,7 @@ def parse_data(raw_data):
 def get_hashes(parsed_data):
     '''Transforms lines and cols into hashes because I thought 
     it was easier. Must use something else for part 2.'''
+
     line_hashes = [hash(line) for line in parsed_data]
 
     col_hashes = []
@@ -76,7 +77,7 @@ print('Part 1:', sum((find_reflection(data) for data in parse_data(TEST_DATA))) 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
-    print('Part 1:', sum((find_reflection(data) for data in parse_data(actual_data))))
+    #print('Part 1:', sum((find_reflection(data) for data in parse_data(actual_data))))
 
 # for part 2 to work - comparing hashes will not work. converting 
 # lines/cols to binary numbers and then bitwise ops, maybe?
