@@ -25,4 +25,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 12 Python](12/d12.py) recursion (**R**) for an ugly brute-force solution of part 1, part 2 TO DO
 * [Day 13 Python](13/d13.py) hash() (**R**), part 2 TO DO because hash() turned out to be a wrong design choice...
 * [Day 14 Python](14/d14.py) 2d array operations (**R**) for part 1, part 2 TO DO (need to implement cycle detection)
-* [Day 15 Python](15/d15.py) dictionaries/hashmaps (**R**), regex (**R**), getting used to enumerate instead of for-loops (**I**)
+* [Day 15 Python](15/d15.py) dictionaries/hashmaps (**R**), enums (**R**), regex (**R**), getting used to enumerate instead of for-loops (**I**)
