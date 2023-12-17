@@ -1,116 +1,57 @@
-from collections import defaultdict, deque
+from collections import defaultdict
 import heapq
 
 print('Day 17 of Advent of Code!')
 
-class Graph:
-    def __init__(self, data):
-        self.number_of_vertices = len(data[0]) * len(data)
-        self.edges_horizontal = defaultdict(list)
-        self.edges_vertical = defaultdict(list)
-        self.edges = defaultdict(list)
+### Solution strongly inspired by https://github.com/snhansen/adventofcode/blob/master/2023/day17/solution.py
+### I immediately knew I needed Dijkstra's algorithm with a twist, but after the fourth attempt to implement 
+### a twist failed, I needed to see where I made the mistake. This solution helped me a lot.
 
-        for i in range(len(data)):
-            for j in range(len(data[0])):
-                for (adj_i, adj_j) in [(i-1, j), (i+1, j)]: # one up, down
-                    if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                        neighbor_coords = (adj_i, adj_j)
-                        neighbor_weight = data[adj_i][adj_j]
-                        self.edges_vertical[(i, j)].append((neighbor_coords, neighbor_weight))
+UP, DOWN, LEFT, RIGHT = (-1, 0), (1, 0), (0, -1), (0, 1)
 
-                for (adj_i, adj_j) in [(i, j-1), (i, j+1)]: # one left, right
-                    if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                        neighbor_coords = (adj_i, adj_j)
-                        neighbor_weight = data[adj_i][adj_j]
-                        self.edges_horizontal[(i, j)].append((neighbor_coords, neighbor_weight))
-                
-                adj_i, adj_j = i-2, j # two up
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i + 1][adj_j]
-                    self.edges_vertical[(i, j)].append((neighbor_coords, neighbor_weight))
 
-                adj_i, adj_j = i+2, j # two down
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i - 1][adj_j]
-                    self.edges_vertical[(i, j)].append((neighbor_coords, neighbor_weight))
+def make_grid(data):
+    graph = defaultdict(int)
+    for i, line in enumerate(data.splitlines()):
+        for j, cost in enumerate(line):
+            graph[(i,j)] = int(cost)
+    corner = (i, j)
+    return graph, corner
 
-                adj_i, adj_j = i, j-2 # two left
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i][adj_j + 1]
-                    self.edges_horizontal[(i, j)].append((neighbor_coords, neighbor_weight))
 
-                adj_i, adj_j = i, j+2 # two right
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i][adj_j - 1]
-                    self.edges_horizontal[(i, j)].append((neighbor_coords, neighbor_weight))
+def dijkstra_with_a_twist(graph, corner):
+    visited = set()
+    first_pos = (0,0)
+    # state = (cost, position, last_dir, hops)
 
-                adj_i, adj_j = i-3, j # three up
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i + 2][adj_j] + data[adj_i + 1][adj_j]
-                    self.edges_vertical[(i, j)].append((neighbor_coords, neighbor_weight))
+    Q = []
+    heapq.heappush(Q, (0, first_pos, RIGHT, 0))
+    heapq.heappush(Q, (0, first_pos, DOWN, 0))
 
-                adj_i, adj_j = i+3, j # three down
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i - 2][adj_j]+ data[adj_i - 1][adj_j]
-                    self.edges_vertical[(i, j)].append((neighbor_coords, neighbor_weight))
+    while Q:
+        cost, position, last_dir, hops = heapq.heappop(Q)
+        if (position, last_dir, hops) in visited:
+            continue
+        visited.add((position, last_dir, hops))
 
-                adj_i, adj_j = i, j-3 # three left
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i][adj_j + 2] + data[adj_i][adj_j + 1]
-                    self.edges_horizontal[(i, j)].append((neighbor_coords, neighbor_weight))
+        if position == corner:
+            return cost
+        
+        # possible turns
+        if last_dir in (UP, DOWN):
+            dirs = (LEFT, RIGHT)
+        if last_dir in (LEFT, RIGHT):
+            dirs = (UP, DOWN)
+        for new_dir in dirs:
+            new_pos = position[0] + new_dir[0], position[1] + new_dir[1]
+            if new_pos in graph:
+                heapq.heappush(Q, (cost + graph[new_pos], new_pos, new_dir, 1))
 
-                adj_i, adj_j = i, j+3 # three right
-                if len(data) > adj_i >= 0 and len(data[0]) > adj_j >= 0:
-                    neighbor_coords = (adj_i, adj_j)
-                    neighbor_weight = data[adj_i][adj_j] + data[adj_i][adj_j - 2] + data[adj_i][adj_j - 1]
-                    self.edges_horizontal[(i, j)].append((neighbor_coords, neighbor_weight))
-
-        for k, v in self.edges_vertical.items():
-            self.edges[k].extend(v)
-        for k, v in self.edges_horizontal.items():
-            self.edges[k].extend(v)
-           
-    
-    def bfs(self, start, start_dir):
-        distances = {vertex: float('inf') for vertex in self.edges}
-        distances[start] = 0
-        visited = defaultdict(int)
-
-        q = deque([])
-        q.appendleft((0, start, start_dir))
-        visited[start] = 0
-
-        while q:
-            dist_so_far, current, direction_horizontal = q.popleft()
-            visited[current] = dist_so_far
-            if direction_horizontal:
-                neighbors = self.edges_horizontal
-                next_dir = False
-            else:
-                neighbors = self.edges_vertical
-                next_dir = True
-            for neighbor in neighbors[current]:
-                
-                neighbor_coord, neighbor_cost = neighbor
-                cost_to_move = dist_so_far + neighbor_cost
-
-                if neighbor_coord not in visited:
-                    distances[neighbor_coord] = cost_to_move
-                    q.append((cost_to_move, neighbor_coord, next_dir))
-                else:
-                    if cost_to_move < distances[neighbor_coord]:
-                        distances[neighbor_coord] = cost_to_move
-                        q.append((cost_to_move, neighbor_coord, next_dir))
-
-        return distances
-
+        # straight ahead because we still can
+        if hops < 3:
+            new_pos = position[0] + last_dir[0], position[1] + last_dir[1]
+            if new_pos in graph:
+                heapq.heappush(Q, (cost + graph[new_pos], new_pos, last_dir, hops+1))
 
 
 TEST_DATA = '''2413432311323
@@ -127,16 +68,14 @@ TEST_DATA = '''2413432311323
 2546548887735
 4322674655533'''
 
-test_data = [[int(dig) for dig in line] for line in TEST_DATA.splitlines()]
-g = Graph(test_data)
-a = g.bfs((0,0), True)[(12,12)]
-b = g.bfs((0,0), False)[(12,12)]
-print(min(a,b))
-
 print('Testing...')
-
+test_graph, test_final = make_grid(TEST_DATA)
+print(dijkstra_with_a_twist(test_graph, test_final))
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
-    test_data = [[int(dig) for dig in line] for line in actual_data.splitlines()]
+    actual_graph, actual_final = make_grid(actual_data)
+    print(dijkstra_with_a_twist(actual_graph, actual_final))
+
+
