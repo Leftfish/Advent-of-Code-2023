@@ -30,4 +30,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 15 Python](15/d15.py) dictionaries/hashmaps (**R**), enums (**R**), regex (**R**), getting used to enumerate instead of for-loops (**I**)
 * [Day 16 Python](16/d16.py) iterative BFS (**I**)
 * [Day 17 Python](17/d17.py) Dijkstra's algorithm (**I**) with a twist!
-* [Day 18 Python](18/d18.py) the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) (**L**)
+* [Day 18 Python](18/d18.py) the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) (**L**) and [Pick's theorem](https://en.wikipedia.org/wiki/Pick%27s_theorem) (**L**)
