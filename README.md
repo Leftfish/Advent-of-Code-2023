@@ -7,7 +7,7 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Day 10 part 2 was the first real challenge and a learning experience. A visualisation on the AoC subreddit pointed me towards the proper algorithm. Then, I needed to look at other participants' attempts to modify Dijkstra's algorithm to solve Day 17.
+The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Day 10 part 2 was the first real challenge and a learning experience. A visualisation on the AoC subreddit pointed me towards the proper algorithm. Then, I needed to look at other participants' attempts to modify Dijkstra's algorithm to solve Day 17. Another hint helped me adapt the shoelace formula for Day 18.
 
 Day 12 part 2 was another tough nut to crack and I haven't solved it yet as of 17th December. Parts 2 of days 13 and 14 are to-do because of time constraints, but I think I have the right approach for each - just haven't had the time to code them properly.
 
