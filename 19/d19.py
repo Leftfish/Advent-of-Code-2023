@@ -1,6 +1,7 @@
+import re
+
 from collections import defaultdict, deque
 from copy import deepcopy
-import re
 from operator import gt, lt
 
 print('Day 19 of Advent of Code!')
@@ -9,12 +10,12 @@ print('Day 19 of Advent of Code!')
 OPERATORS = {'>': gt, '<': lt}
 ACCEPT = 'A'
 REJECT = 'R'
-EOL = 'END'
+FINISH = 'END'
 XMAS_TO_ID = {'x': 0, 'm': 1, 'a': 2, 's': 3}
 
 
 class Range:
-    def __init__(self, nxt, x=None, m=None, a=None, s=None) -> None:
+    def __init__(self, nxt, x=None, m=None, a=None, s=None):
         self.x = x if x else [1,4000]
         self.m = m if m else [1,4000]
         self.a = a if a else [1,4000]
@@ -28,24 +29,28 @@ class Range:
         s = self.s[1] - self.s[0] + 1
         return x*m*a*s
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'x: {self.x} m: {self.m} a: {self.a} s: {self.s} nxt: {self.nxt}'
 
 
 def make_rulebook(workflows):
     rulebook = defaultdict(dict)
+
     for workflow in workflows.splitlines():
         name, raw_rules = re.findall(r'(.+){(.+)}', workflow)[0]
         all_rules = raw_rules.split(',')
         rulebook[name] = defaultdict(dict)
+
         for idx, rule in enumerate(all_rules[:-1]):
             what, where = rule.split(':')
             parameter = what[0]
             op = OPERATORS[what[1]]
             value = int(what[2:])
-            rulebook[name][idx] = {parameter: (op, value, where)}
-        last = max(rulebook[name]) + 1
-        rulebook[name][last] = {EOL: all_rules[-1]}
+            rulebook[name][idx] = (parameter, op, value, where)
+
+        last_rule_id = max(rulebook[name]) + 1
+        rulebook[name][last_rule_id] = (FINISH, None, None, all_rules[-1])
+
     return rulebook
 
 
@@ -60,19 +65,15 @@ def read_ratings(ratings):
 
 
 def get_next(rating, rulebook, name):
-    for rule in rulebook[name].values():
-        param = list(rule.keys())[0]
-        if param != EOL:
-            rating_value = rating[param]
-            rule_op = rule[param][0]
-            rule_value = rule[param][1]
-            if rule_op(rating_value, rule_value):
-                return rule[param][2]
+    for param, op, rule_value, nxt in rulebook[name].values():
+        if param != FINISH:
+            if op(rating[param], rule_value):
+                return nxt
         else:
-            return rule[param]
+            return nxt
 
 
-def sort_naive(rulebook, ratings):
+def evaluate_parts(rulebook, ratings):
     s = 0
     for rating in ratings.values():
         result = 'in'
@@ -83,7 +84,7 @@ def sort_naive(rulebook, ratings):
     return s
 
 
-def sort_entire_rulebook(rulebook):
+def evaluate_rulebook(rulebook):
     start = Range(nxt='in')
     q = deque([start])
     accepted = []
@@ -92,36 +93,30 @@ def sort_entire_rulebook(rulebook):
         current = q.popleft()
 
         rules_to_check = rulebook[current.nxt]
-        rng_not_covered = [current.x.copy(), current.m.copy(), current.a.copy(), current.s.copy()]
+        rng_not_covered = [current.x, current.m, current.a, current.s]
 
-        for rule in rules_to_check:
-            rule_id = list(rules_to_check[rule].keys())[0]
-            rng_to_updt = deepcopy(rng_not_covered)
+        for rule_id in rules_to_check:
+            param, op, value, next_step = rules_to_check[rule_id]
+            rng_to_update = deepcopy(rng_not_covered)
 
-            if rule_id != EOL:
-                op, value, new_nxt = rules_to_check[rule][rule_id]
-                rule_idx = XMAS_TO_ID[rule_id]
+            if param != FINISH:
+                param_idx = XMAS_TO_ID[param]
                 if op == lt:
-                    if rng_to_updt[rule_idx][1] > value:
-                        rng_to_updt[rule_idx][1], rng_not_covered[rule_idx][0] = value - 1, value
+                    if rng_to_update[param_idx][1] > value:
+                        rng_to_update[param_idx][1], rng_not_covered[param_idx][0] = value-1, value
                 if op == gt:
-                    if rng_to_updt[rule_idx][0] < value:
-                        rng_to_updt[rule_idx][0], rng_not_covered[rule_idx][1] = value + 1, value
+                    if rng_to_update[param_idx][0] < value:
+                        rng_to_update[param_idx][0], rng_not_covered[param_idx][1] = value+1, value
 
-                new_state = Range(nxt=new_nxt, x=rng_to_updt[0], m=rng_to_updt[1], \
-                                  a=rng_to_updt[2], s=rng_to_updt[3])
-
-                if new_nxt == ACCEPT:
+                new_state = Range(next_step, *rng_to_update)
+                if next_step == ACCEPT:
                     accepted.append(new_state)
                 else:
                     q.append(new_state)
 
-            elif rule_id == EOL:
-                new_nxt = rules_to_check[rule][rule_id]
-                new_state = Range(nxt=new_nxt, x=rng_to_updt[0], m=rng_to_updt[1], \
-                                  a=rng_to_updt[2], s=rng_to_updt[3])
-
-                if new_nxt == ACCEPT:
+            elif param == FINISH:
+                new_state = Range(next_step, *rng_not_covered)
+                if next_step == ACCEPT:
                     accepted.append(new_state)
                 else:
                     q.append(new_state)
@@ -150,8 +145,8 @@ print('Testing...')
 raw_workflows, raw_ratings = TEST_DATA.split('\n\n')
 test_rulebook = make_rulebook(raw_workflows)
 test_ratings = read_ratings(raw_ratings)
-print('Part 1:', sort_naive(test_rulebook, test_ratings) == 19114)
-print('Part 2:', sum((rng.sum() for rng in sort_entire_rulebook(test_rulebook))) == 167409079868000)
+print('Part 1:', evaluate_parts(test_rulebook, test_ratings) == 19114)
+print('Part 2:', sum((rng.sum() for rng in evaluate_rulebook(test_rulebook))) == 167409079868000)
 
 
 with open('inp', mode='r', encoding='utf-8') as inp:
@@ -160,5 +155,5 @@ with open('inp', mode='r', encoding='utf-8') as inp:
     raw_workflows, raw_ratings = actual_data.split('\n\n')
     actual_rulebook = make_rulebook(raw_workflows)
     actual_ratings = read_ratings(raw_ratings)
-    print('Part 1:', sort_naive(actual_rulebook, actual_ratings))
-    print('Part 2:', sum((rng.sum() for rng in sort_entire_rulebook(actual_rulebook))))
+    print('Part 1:', evaluate_parts(actual_rulebook, actual_ratings))
+    print('Part 2:', sum((rng.sum() for rng in evaluate_rulebook(actual_rulebook))))
