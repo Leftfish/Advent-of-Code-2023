@@ -32,3 +32,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 17 Python](17/d17.py) Dijkstra's algorithm (**I**) with a twist!
 * [Day 18 Python](18/d18.py) the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) (**L**) and [Pick's theorem](https://en.wikipedia.org/wiki/Pick%27s_theorem) (**L**)
 * [Day 19 Python](19/d19.py) spotting tree structures (**I**) and traversing them with BFS (**I**), deepcopy (**R**)
+* [Day 20 Python](20/d20.py) hash() to create hashable objects (**R**), part 2 TO DO
