@@ -1,3 +1,4 @@
+from math import lcm
 from collections import deque
 
 print('Day 20 of Advent of Code!')
@@ -194,3 +195,20 @@ with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
     print('Part 1:', run_pulses(1000, parse_data(actual_data), False))
+g = parse_data(actual_data)
+
+c = 0
+print(f"c {c} jm {g['jm'].last}  zx {g['zx'].last}")
+while c < 2049:
+    c += 1
+    print(f"c {c} jm {g['jm'].last}  zx {g['zx'].last}")
+    push_button(g, False)
+
+    
+    
+
+
+# qs 2048
+# pr 2048
+# jv 2048
+# jm 2048
