@@ -1,3 +1,4 @@
+from copy import deepcopy
 from collections import defaultdict
 from itertools import product
 
@@ -105,6 +106,9 @@ with open('inp', mode='r', encoding='utf-8') as inp:
 test_bricks, grid = make_bricks(TEST_DATA)
 bricks = sorted(test_bricks, key=lambda brick: min(coord[2] for coord in brick.coords))
 move_bricks(bricks, grid)
+print('--')
+
+'''
 boomable = 0
 for i, brick in enumerate(bricks):
     print('Checking', i)
@@ -118,6 +122,7 @@ for i, brick in enumerate(bricks):
             boomable += 1
 
 print(boomable)
+'''
 
 '''ITERUJ PRZEZ BRICKI
 - CZY TEN BRICK NIKOGO NIE SUPPORTUJE? DEZINTEGRUJ
