@@ -30,17 +30,9 @@ def make_grid(data):
             grid[(i, j)] = char
     return grid
 
-def remove_slides(grid):
-    new_grid = {}
-    for k, v in grid.items():
-        if v in SLIDES:
-            new_grid[k] = FLOOR
-        else:
-            new_grid[k] = grid[k]
-    return new_grid
 
-def adjacency(grid, first):
-    adj = defaultdict(list)
+def adjacency_with_slides(grid, first):
+    graph = defaultdict(list)
     visited = set()
     stack = []
     stack.append((first, DOWN))
@@ -54,27 +46,27 @@ def adjacency(grid, first):
                 if current_field in SLIDES:
                     new_coord = (current[0] + direction[0], current[1] + direction[1])
                     if new_coord in grid and grid[new_coord] != WALL:
-                        adj[current].append(new_coord)
+                        graph[current].append(new_coord)
                         stack.append((new_coord, direction))
                 elif direction != OPPOSITES[last_direction]:
                     new_coord = (current[0] + direction[0], current[1] + direction[1])
                     if new_coord in grid and grid[new_coord] != WALL:
-                        adj[current].append(new_coord)
+                        graph[current].append(new_coord)
                         stack.append((new_coord, direction))
-    return adj
+    return graph
 
 
-def topsort(adj, first):
+def topsort(graph, first):
     stack = []
-    postorder = deque()
+    postorder = []
     visited = set()
     stack.append(first)
 
     while stack:
-        cur = stack[-1]
+        current = stack[-1]
         tail = True
 
-        for v in adj[cur]:
+        for v in graph[current]:
             if v not in visited:
                 tail = False
                 visited.add(v)
@@ -82,22 +74,87 @@ def topsort(adj, first):
                 break
         if tail:
             stack.pop()
-            postorder.append(cur)
+            postorder.append(current)
 
     return postorder
 
 
-def find_longest(adj, topsorted, first):
-    distances = {vertex: 0 for vertex in adj}
-    distances[first] = 0
+def find_longest_with_slides(graph, topsorted, origin):
+    distances = {vertex: 0 for vertex in graph}
+    distances[origin] = 0
 
-    s = topsorted.copy()
-    while s:
-        nxt = s.pop()
-        for adjacent in adj[nxt]:
+    while topsorted:
+        nxt = topsorted.pop()
+        for adjacent in graph[nxt]:
             if distances[adjacent] < distances[nxt] + 1:
                 distances[adjacent] = distances[nxt] + 1
     return distances
+
+
+def adjacency_without_slides(grid):
+    graph = defaultdict(list)
+    for fld in grid:
+        if fld != WALL:
+            for d in DIRECTIONS:
+                new_coord = (fld[0] + d[0], fld[1] + d[1])
+                if new_coord in grid and grid[new_coord] != WALL:
+                    graph[fld].append(new_coord)
+    return graph
+
+
+def compress_graph(origin, target, graph):
+    compressed = defaultdict(dict)
+    big_nodes = [v for v in graph if len(graph[v]) > 2]
+
+    for node in big_nodes:
+        q = deque()
+        visited = set()
+        for neighbor in graph[node]:
+            move = (neighbor, 1)
+            q.append(move)
+        while q:
+            current, steps = q.pop()
+            if current in big_nodes and current != node:
+                compressed[current][node] = steps
+                compressed[node][current] = steps
+                continue
+            if current in (origin, target):
+                compressed[current][node] = steps
+                compressed[node][current] = steps
+                continue
+            visited.add(current)
+            for neighbor in graph[current]:
+                if neighbor not in visited and neighbor != node:
+                    q.append((neighbor, steps+1))
+    return compressed
+
+
+def get_all_paths(origin, target, graph):
+    def dfs(target, current_path, visited, graph, path_list):
+        current_node = current_path[-1]
+        if current_node == target:
+            path_list.append(list(current_path))
+        else:
+            for neighbor in graph[current_node]:
+                if neighbor not in visited:
+                    current_path.append(neighbor)
+                    visited.add(neighbor)
+                    dfs(target, current_path, visited, graph, path_list)
+                    visited.remove(neighbor)
+                    current_path.pop()
+        return path_list
+
+    return dfs(target, [origin], set(origin), graph, list())
+
+
+def find_longest_without_slides(paths):
+    distances = []
+    for p in paths:
+        d = 0
+        for this, nxt in zip(p, p[1:]):
+            d += proper_adj[this][nxt]
+        distances.append(d)
+    return max(distances)
 
 
 TEST_DATA = '''#.#####################
@@ -127,15 +184,21 @@ TEST_DATA = '''#.#####################
 print('Testing...')
 test_grid = make_grid(TEST_DATA)
 start = (0, 1)
-test_graph = adjacency(test_grid, start)
+test_graph = adjacency_with_slides(test_grid, start)
 test_topsorted = topsort(test_graph, start)
-print('Part 1:', find_longest(test_graph, test_topsorted, start)[test_topsorted[0]] == 94)
+end = test_topsorted[0]
+proper_adj = compress_graph(start, end, adjacency_without_slides(test_graph))
+print('Part 1:', find_longest_with_slides(test_graph, test_topsorted, start)[end] == 94)
+print('Part 2:', find_longest_without_slides(get_all_paths(start, end, proper_adj)) == 154)
+
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
-    actual_data = inp.read()
-    actual_grid = make_grid(actual_data)
+    actual_grid = make_grid(inp.read())
     start = (0, 1)
-    actual_graph = adjacency(actual_grid, start)
+    actual_graph = adjacency_with_slides(actual_grid, start)
     actual_topsorted = topsort(actual_graph, start)
-    print('Part 1:', find_longest(actual_graph, actual_topsorted, start)[actual_topsorted[0]])
+    end = actual_topsorted[0]
+    proper_adj = compress_graph(start, end, adjacency_without_slides(actual_graph))
+    print('Part 1:', find_longest_with_slides(actual_graph, actual_topsorted, start)[end])
+    print('Part 2:', find_longest_without_slides(get_all_paths(start, end, proper_adj)))

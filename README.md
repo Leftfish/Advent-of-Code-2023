@@ -35,4 +35,4 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 20 Python](20/d20.py): hash() to create hashable objects (**R**), part 2 TO DO
 * [Day 21 Python](21/d21.py): Dijkstra's algorithm (**R**), part 2 TO DO
 * Day 22 Python: TO DO
-* [Day 23 Python](22/d22.py) iterative DFS (**R**), topological sorting (**L**), longest path problem (**L**), part 2 TO DO
+* [Day 23 Python](23/d23.py) iterative and recursive DFS (**R**), topological sorting (**L**), longest path problem (**L**), working with directed acyclic and cyclic graphs (**I**)
