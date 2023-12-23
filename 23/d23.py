@@ -43,12 +43,7 @@ def adjacency_with_slides(grid, first):
             visited.add(current)
             current_field = grid[current]
             for direction in FIELD_TO_DIR[current_field]:
-                if current_field in SLIDES:
-                    new_coord = (current[0] + direction[0], current[1] + direction[1])
-                    if new_coord in grid and grid[new_coord] != WALL:
-                        graph[current].append(new_coord)
-                        stack.append((new_coord, direction))
-                elif direction != OPPOSITES[last_direction]:
+                if current_field in SLIDES or direction != OPPOSITES[last_direction]:
                     new_coord = (current[0] + direction[0], current[1] + direction[1])
                     if new_coord in grid and grid[new_coord] != WALL:
                         graph[current].append(new_coord)
@@ -126,6 +121,7 @@ def compress_graph(origin, target, graph):
             for neighbor in graph[current]:
                 if neighbor not in visited and neighbor != node:
                     q.append((neighbor, steps+1))
+
     return compressed
 
 
