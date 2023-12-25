@@ -105,8 +105,6 @@ TEST_DATA = '''1,0,1~1,2,1
 print('Testing...')
 print('Part 1:', count_redundant_bricks(TEST_DATA) == 5)
 
-part2(TEST_DATA)
-
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
