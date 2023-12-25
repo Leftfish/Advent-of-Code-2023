@@ -7,9 +7,9 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18.
+The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approach for simulating bricks for Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18.
 
-Day 12 part 2 and Day 21 part 2 are on the to-do list indefinitely, i.e. until I get an idea how to approach them. Parts 2 of days 13, 14 and 20, and day 22 are still to-do because of time constraints, but I think I have the right approach for each; just haven't had the opportunity yet to code them properly. Part 2 of day 24 is to-do because Christmas!
+Parts 2 of Days 12, 21 and 24 are on the to-do list indefinitely, i.e. until I get an idea how to approach them. Parts 2 of Days 13, 14, 20, and 22 are still to-do because of time constraints, but I think I have the right approach for each; just haven't had the opportunity yet to code them properly.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -34,6 +34,6 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 19 Python](19/d19.py): spotting tree structures (**I**) and traversing them with BFS (**I**), deepcopy (**R**)
 * [Day 20 Python](20/d20.py): hash() to create hashable objects (**R**), part 2 TO DO
 * [Day 21 Python](21/d21.py): Dijkstra's algorithm (**R**), part 2 TO DO
-* Day 22 Python: TO DO
+* [Day 22 Python](22/d22.py): defaultdict with a lambda expression in the constructor (**L**), part 2 TO DO
 * [Day 23 Python](23/d23.py) iterative and recursive DFS (**R**), topological sorting (**L**), longest path problem (**L**), working with directed acyclic and cyclic graphs (**I**)
 * [Day 24 Python](24/d24.py): finding line intersections in Euclidean geometry (**R**), part 2 TO DO

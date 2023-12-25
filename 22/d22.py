@@ -1,130 +1,113 @@
-from copy import deepcopy
+import re
 from collections import defaultdict
-from itertools import product
+
+'''Part 1 very strongly inspired by a solution posted by mtpink1:
+https://www.reddit.com/r/adventofcode/comments/18o7014/comment/keha96f/?utm_source=reddit&utm_medium=web2x&context=3
+
+My original solution wasn't using the height map and kept spitting out wrong (too high) results.'''
 
 print('Day 22 of Advent of Code!')
 
+class Brick:
+    def __init__(self, coords) -> None:
+        coords: tuple = coords
+        self.xmin, self.ymin, self.zmin = coords[0]
+        self.xmax, self.ymax, self.zmax = coords[1]
+        self.bottom = min(self.zmin, self.zmax)
+        self.top = max(self.zmin, self.zmax)
+
+
+    def __repr__(self) -> str:
+        return f'{self.xmin}, {self.ymin}, {self.zmin} -> {self.xmax}, {self.ymax}, {self.zmax}'
+
+
+    def fields_on_bottom(self):
+        fields = set()
+        for x in range(self.xmin, self.xmax+1):
+            for y in range(self.ymin, self.ymax+1):
+                fields.add((x, y))
+        return fields
+
+
+def make_bricks(data):
+    bricks = []
+    for line in data.splitlines():
+        numbers = re.findall(r'(\d+),(\d+),(\d+)~(\d+),(\d+),(\d+)', line)[0]
+        start = [int(n) for n in numbers[:3]]
+        end = [int(n) for n in numbers[3:]]
+        bricks.append(Brick((start, end)))
+    return bricks
+
+
+def count_redundant_bricks(data):
+    bricks = make_bricks(data)
+
+    bricks.sort(key=lambda b: b.bottom)
+
+    height_map = defaultdict(lambda: (0, -1))
+    supporting = defaultdict(set)
+    supported_by = defaultdict(set)
+
+    for i, brick in enumerate(bricks):
+        max_height = 0 # we check from the floor up but will update this value for each sub-brick on the bottom of the main brick
+
+        this_supported_by = set() # set of indexes of bricks supported by this
+
+        for (x, y) in brick.fields_on_bottom():
+            height, other_i = height_map[(x, y)]
+
+            # scenario 1: in position (x, y) the height map tells us that something is higher than 0 (or later updated height)!
+            # which means that whatever occupies (x, y) will support this brick
+            # and we need to update the max_height to calculate the drop distance
+            if height > max_height:
+                max_height = height
+                this_supported_by = {other_i}
+
+            # scenario 2: in position (x, y) the height map tells us that something is exactly on the same height
+            # this means that this brick has support from one more!
+            elif height == max_height:
+                this_supported_by.add(other_i)
+
+        for other_i in this_supported_by:
+            supporting[other_i].add(i)
+            supported_by[i] = this_supported_by
+
+        # calculate how much the brick can drop
+        drop_distance = brick.bottom - max_height - 1
+
+        # update the height map (without changing the brick object)
+        # in position (x, y) the new top is initial top minus drop distance
+        # and it is occupied by brick i
+        for (x, y) in brick.fields_on_bottom():
+            height_map[(x, y)] = (brick.top - drop_distance, i)
+
+    redundant = 0
+
+    for i, brick in enumerate(bricks):
+        for supported_i in supporting[i]:
+            if len(supported_by[supported_i]) == 1:
+                break
+        else:
+            redundant += 1
+
+    return redundant
 
 
 TEST_DATA = '''1,0,1~1,2,1
 0,0,2~2,0,2
-0,2,3~2,2,3
 0,0,4~0,2,4
+0,2,3~2,2,3
 2,0,5~2,2,5
 0,1,6~2,1,6
 1,1,8~1,1,9'''
 
-FLOOR = 0
 
-class Brick:
-    def __init__(self, coords) -> None:
-        self.coords = coords
-        self.moving = True
-        self.supports = set()
-        self.supported_by = set()
+print('Testing...')
+print('Part 1:', count_redundant_bricks(TEST_DATA) == 5)
 
-    def __repr__(self) -> str:
-        return f'{self.coords}'
-    
-    def bottom_row(self):
-        min_z = min(coord[2] for coord in self.coords)
-        return set((coord for coord in self.coords if coord[2] == min_z))
-    
-    def top_row(self):
-        max_z = max(coord[2] for coord in self.coords)
-        return set((coord for coord in self.coords if coord[2] == max_z))
-    
-    def is_on_bottom(self):
-        min_z = min(coord[2] for coord in self.coords)
-        return min_z == 1
-    
-    def is_something_below(self, grid):
-        one_below = set([(x, y, z-1) for x, y, z in self.bottom_row()])
-        belows = [coord in grid for coord in one_below]
-        return any(belows) or self.is_on_bottom()
-    
-    def find_supporting_bricks(self, grid):
-        for field in self.bottom_row():
-            coord = (field[0], field[1], field[2]-1)
-            if coord in grid:
-                below = grid[coord]
-                if below != self:
-                    self.supported_by.add(below)
-                    below.supports.add(self)
-
-    def drop(self, grid):
-        new_coords = set([(x, y, z-1) for x, y, z in self.coords])
-        for old_coord in self.coords:
-            del grid[old_coord]
-        self.coords = new_coords
-        for new_coord in self.coords:
-            grid[new_coord] = self
-
-    def stop(self):
-        self.moving = False
-
-
-def make_bricks(data):
-    brick_coords = data.splitlines()
-    bricks = []
-    grid = {}
-    for brick_coord in brick_coords:
-        start, end = brick_coord.split('~')
-        sx, sy, sz = [int(d) for d in start.split(',')]
-        ex, ey, ez = [int(d) for d in end.split(',')]
-
-        occupied_by_this = set()
-        for x in range(sx, ex+1):
-            for y in range(sy, ey+1):
-                for z in range(sz, ez+1):
-                    occupied_by_this.add((x, y, z))
-        new_brick = Brick(occupied_by_this)
-        bricks.append(new_brick)
-        for coord in occupied_by_this:
-            grid[coord] = new_brick  
-    for brick in bricks:
-        brick.find_supporting_bricks(grid)
-    return bricks, grid
-
-
-def move_bricks(bricks, grid):
-    i = 0
-    for b in bricks:
-        while True:
-            if not b.is_something_below(grid):
-                b.drop(grid)
-                print(f'{i} dropping by one')
-            else:
-                b.find_supporting_bricks(grid)
-                b.stop()
-                break
-        i += 1
+part2(TEST_DATA)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
+    print('Solution...')
     actual_data = inp.read()
-
-test_bricks, grid = make_bricks(TEST_DATA)
-bricks = sorted(test_bricks, key=lambda brick: min(coord[2] for coord in brick.coords))
-move_bricks(bricks, grid)
-print('--')
-
-'''
-boomable = 0
-for i, brick in enumerate(bricks):
-    print('Checking', i)
-    supported = len(brick.supports)
-    if not supported:
-        boomable += 1
-        continue
-    else:
-        others = [len(other.supported_by) > 1 for other in brick.supports]
-        if all(others):
-            boomable += 1
-
-print(boomable)
-'''
-
-'''ITERUJ PRZEZ BRICKI
-- CZY TEN BRICK NIKOGO NIE SUPPORTUJE? DEZINTEGRUJ
-- CZY TEN BRICK KOGOŚ SUPPORTUJE:
-    CZY KOGOŚ MA SUPPORTED_BY DŁUŻSZE NIŻ 1? ZDEZINTEGRUJ'''
+    print('Part 1:', count_redundant_bricks(actual_data))
