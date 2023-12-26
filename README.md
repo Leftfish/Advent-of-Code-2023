@@ -9,7 +9,7 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 
 The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approach for simulating bricks for Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18.
 
-As of December 25: parts 2 of Days 12, 21 and 24 are on the to-do list indefinitely, i.e. until I get an idea how to approach them. Parts 2 of Days 13, 14, 20, and 22 are still to-do because of time constraints, but I think I have the right approach for each; just haven't had the opportunity yet to code them properly.
+As of December 26: parts 2 of Days 12, 21 and 24 are on the to-do list indefinitely, i.e. until I get an idea how to approach them. Parts 2 of Days 13, 14, and 20 are still to-do because of time constraints, but I think I have the right approach for each; just haven't had the opportunity yet to code them properly.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -34,7 +34,7 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 19 Python](19/d19.py): spotting tree structures (**I**) and traversing them with BFS (**I**), deepcopy (**R**)
 * [Day 20 Python](20/d20.py): hash() to create hashable objects (**R**), part 2 TO DO
 * [Day 21 Python](21/d21.py): Dijkstra's algorithm (**R**), part 2 TO DO
-* [Day 22 Python](22/d22.py): defaultdict with a lambda expression in the constructor (**L**), part 2 TO DO
+* [Day 22 Python](22/d22.py): defaultdict with a lambda expression in the constructor (**L**), iterative BFS (**R**)
 * [Day 23 Python](23/d23.py) iterative and recursive DFS (**R**), topological sorting (**L**), longest path problem (**L**), working with directed acyclic and cyclic graphs (**I**)
 * [Day 24 Python](24/d24.py): finding line intersections in Euclidean geometry (**R**), part 2 TO DO
 * [Day 25 Python](25/d25.py): networkx (**L**), graphviz (**L**) and argparse (**L**) for a 'smart' solution that requires eyeballing the graph

@@ -1,5 +1,6 @@
 import re
-from collections import defaultdict
+from collections import defaultdict, deque
+from copy import deepcopy
 
 '''Part 1 very strongly inspired by a solution posted by mtpink1:
 https://www.reddit.com/r/adventofcode/comments/18o7014/comment/keha96f/?utm_source=reddit&utm_medium=web2x&context=3
@@ -39,7 +40,7 @@ def make_bricks(data):
     return bricks
 
 
-def count_redundant_bricks(data):
+def drop_bricks(data):
     bricks = make_bricks(data)
 
     bricks.sort(key=lambda b: b.bottom)
@@ -90,7 +91,24 @@ def count_redundant_bricks(data):
         else:
             redundant += 1
 
-    return redundant
+    return redundant, supported_by, supporting
+
+
+def simulate_all_falls(data):
+    s = 0
+    for idx in range(len(data.splitlines())):
+        q = deque([idx])
+        _, supported_by, supporting = drop_bricks(data)
+        falls = 0
+        while q:
+            removed_brick = q.popleft()
+            for supported_brick in supporting[removed_brick]:
+                supported_by[supported_brick].remove(removed_brick)
+                if not supported_by[supported_brick]:
+                    falls += 1
+                    q.append(supported_brick)
+        s += falls
+    return s
 
 
 TEST_DATA = '''1,0,1~1,2,1
@@ -103,9 +121,11 @@ TEST_DATA = '''1,0,1~1,2,1
 
 
 print('Testing...')
-print('Part 1:', count_redundant_bricks(TEST_DATA) == 5)
+print('Part 1:', drop_bricks(TEST_DATA)[0] == 5)
+print('Part 2:', simulate_all_falls(TEST_DATA) == 7)
 
 with open('inp', mode='r', encoding='utf-8') as inp:
     print('Solution...')
     actual_data = inp.read()
-    print('Part 1:', count_redundant_bricks(actual_data))
+    print('Part 1:', drop_bricks(actual_data)[0])
+    print('Part 2:', simulate_all_falls(actual_data))
