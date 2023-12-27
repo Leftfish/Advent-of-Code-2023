@@ -9,7 +9,7 @@ For the fifth time I'm trying to find out how far I can make it in [Advent of Co
 
 The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approach for simulating bricks for Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18.
 
-As of December 26: parts 2 of Days 12, 20, 21 and 24 are on the to-do list indefinitely, i.e. until I get an idea how to approach them. Part 2 of Day 14 is still to-do because of time constraints, but I think I have the right approach for it; just haven't had the opportunity yet to code it properly.
+As of December 26: parts 2 of Days 12, 20, 21 and 24 are on the to-do list until I get an idea how to approach them.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -26,7 +26,7 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 11 Python](11/d11.py): deepcopy (**R**), itertools.combinations (**R**), Manhattan distance (**R**)
 * [Day 12 Python](12/d12.py): recursion (**R**) for an ugly brute-force solution of part 1, part 2 TO DO
 * [Day 13 Python](13/d13.py): hash() for the original part 1 solution(**R**), enumerate for the second approach that also solved part 2 (**R**)
-* [Day 14 Python](14/d14.py): 2d array operations (**R**) for part 1, part 2 TO DO (need to implement cycle detection)
+* [Day 14 Python](14/d14.py): using hashmaps for 2d array operations (**R**), hash() for storing states to detect cycle (**R**)
 * [Day 15 Python](15/d15.py): dictionaries/hashmaps (**R**), enums (**R**), regex (**R**), getting used to enumerate instead of for-loops (**I**)
 * [Day 16 Python](16/d16.py): iterative BFS (**I**)
 * [Day 17 Python](17/d17.py): Dijkstra's algorithm (**I**) with a twist!
