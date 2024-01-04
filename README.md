@@ -1,15 +1,15 @@
 # Advent of Code 2023
 
-For the fifth time I'm trying to find out how far I can make it in [Advent of Code](https://adventofcode.com/2023/). Results for previous editions:
+For the sixth time I'm trying to find out how far I can make it in [Advent of Code](https://adventofcode.com/2023/). Results for previous editions:
 * 2018: 9 days
 * 2019: 13 days
 * [2020](https://github.com/Leftfish/Advent-of-Code-2020): 25 days for the first time!
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approach for simulating bricks for Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18.
+The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approach for simulating bricks for Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12.
 
-As of December 26: parts 2 of Days 12, 20, 21 and 24 are on the to-do list until I get an idea how to approach them.
+As of 4.01.2024: parts 2 of Days 20, 21 and 24 are on the to-do list until I get an idea how to approach them.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -24,7 +24,7 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 9 Python](09/d09.py): deque (**R**)
 * [Day 10 Python](10/d10.py): the [even-odd algorithm](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule) (**L**) although the implementation is not perfect (works for the acutal input, gives off-by-one errors on test data)
 * [Day 11 Python](11/d11.py): deepcopy (**R**), itertools.combinations (**R**), Manhattan distance (**R**)
-* [Day 12 Python](12/d12.py): recursion (**R**) for an ugly brute-force solution of part 1, part 2 TO DO
+* [Day 12 Python](12/d12.py): recursion (**I**), functools.cache (**I**), treating booleans as ints (**R**)
 * [Day 13 Python](13/d13.py): hash() for the original part 1 solution(**R**), enumerate for the second approach that also solved part 2 (**R**)
 * [Day 14 Python](14/d14.py): using hashmaps for 2d array operations (**R**), hash() for storing states to detect cycle (**R**)
 * [Day 15 Python](15/d15.py): dictionaries/hashmaps (**R**), enums (**R**), regex (**R**), getting used to enumerate instead of for-loops (**I**)
