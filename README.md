@@ -7,9 +7,9 @@ For the sixth time I'm trying to find out how far I can make it in [Advent of Co
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approach for simulating bricks for Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12.
+The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approaches for Day 20 part 2 (turned out I had a good idea and a stupid implementation error) and Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12.
 
-As of 4.01.2024: parts 2 of Days 20, 21 and 24 are on the to-do list until I get an idea how to approach them.
+As of 7.01.2024: parts 2 of Days 21 and 24 are on the to-do list until I get an idea how to approach them.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -25,14 +25,14 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 10 Python](10/d10.py): the [even-odd algorithm](https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule) (**L**) although the implementation is not perfect (works for the acutal input, gives off-by-one errors on test data)
 * [Day 11 Python](11/d11.py): deepcopy (**R**), itertools.combinations (**R**), Manhattan distance (**R**)
 * [Day 12 Python](12/d12.py): recursion (**I**), functools.cache (**I**), treating booleans as ints (**R**)
-* [Day 13 Python](13/d13.py): hash() for the original part 1 solution(**R**), enumerate for the second approach that also solved part 2 (**R**)
+* [Day 13 Python](13/d13.py): hash() for the original part 1 solution (**R**), enumerate for the second approach that also solved part 2 (**R**)
 * [Day 14 Python](14/d14.py): using hashmaps for 2d array operations (**R**), hash() for storing states to detect cycle (**R**)
 * [Day 15 Python](15/d15.py): dictionaries/hashmaps (**R**), enums (**R**), regex (**R**), getting used to enumerate instead of for-loops (**I**)
 * [Day 16 Python](16/d16.py): iterative BFS (**I**)
 * [Day 17 Python](17/d17.py): Dijkstra's algorithm (**I**) with a twist!
 * [Day 18 Python](18/d18.py): the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) (**L**) and [Pick's theorem](https://en.wikipedia.org/wiki/Pick%27s_theorem) (**L**)
 * [Day 19 Python](19/d19.py): spotting tree structures (**I**) and traversing them with BFS (**I**), deepcopy (**R**)
-* [Day 20 Python](20/d20.py): hash() to create hashable objects (**R**), part 2 TO DO
+* [Day 20 Python](20/d20.py): creating hashable objects for the original part 1 solution (**R**), itertools.count (**L**) for a proper and simplified solution that got rid of OOP, graphviz (**L**) for a [visualisation](20/machine_vis.png) that helped me figure out how the input works
 * [Day 21 Python](21/d21.py): Dijkstra's algorithm (**R**), part 2 TO DO
 * [Day 22 Python](22/d22.py): defaultdict with a lambda expression in the constructor (**L**), iterative BFS (**R**)
 * [Day 23 Python](23/d23.py) iterative and recursive DFS (**R**), topological sorting (**L**), longest path problem (**L**), working with directed acyclic and cyclic graphs (**I**)
