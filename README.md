@@ -7,9 +7,9 @@ For the sixth time I'm trying to find out how far I can make it in [Advent of Co
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approaches for Day 20 part 2 (turned out I had a good idea and a stupid implementation error) and Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12.
+The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approaches for Day 20 part 2 (turned out I had a good idea and a stupid implementation error) and Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12. Also, the [discussion](https://old.reddit.com/r/adventofcode/comments/18pptor/2023_day_24_part_2java_is_there_a_trick_for_this/keps780/?context=3) about a brute-force approach and changing the frame of reference helped greatly with Day 24 part 2.
 
-As of 7.01.2024: parts 2 of Days 21 and 24 are on the to-do list until I get an idea how to approach them.
+As of 5.10.2024: part 2 of Day 21 remains on the to-do list until I get an idea how to approach it. I might need a good tutorial, though...
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -36,5 +36,5 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 21 Python](21/d21.py): Dijkstra's algorithm (**R**), part 2 TO DO
 * [Day 22 Python](22/d22.py): defaultdict with a lambda expression in the constructor (**L**), iterative BFS (**R**)
 * [Day 23 Python](23/d23.py) iterative and recursive DFS (**R**), topological sorting (**L**), longest path problem (**L**), working with directed acyclic and cyclic graphs (**I**)
-* [Day 24 Python](24/d24.py): finding line intersections in Euclidean geometry (**R**), part 2 TO DO
+* [Day 24 Python](24/d24.py): finding line intersections in Euclidean geometry (**R**), combining generators with BFS (**L**)
 * [Day 25 Python](25/d25.py): networkx (**L**), graphviz (**L**) and argparse (**L**) for a 'smart' solution that requires eyeballing the graph

@@ -1,7 +1,9 @@
-from itertools import combinations, cycle
+from itertools import combinations
+from collections import deque
 
 print('Day 24 of Advent of Code!')
 
+# Part 1 begins, written in December 2023
 
 def make_two_points(data):
     coords, delta = data.split(' @ ')
@@ -19,11 +21,12 @@ def find_intersection(this, other):
     denominator = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4)
 
     if denominator == 0:
-        return None # coincident lines or parallel lines; puzzle rules make the former the only possibility
+        return None
+        # coincident lines or parallel lines; puzzle rules make the former the only possibility
 
     px_numerator = (x1*y2 - y1*x2)*(x3-x4) - (x1-x2)*(x3*y4-y3*x4)
     py_numerator = (x1*y2 - y1*x2)*(y3-y4) - (y1-y2)*(x3*y4-y3*x4)
-    
+
     px = px_numerator/denominator
     py = py_numerator/denominator
 
@@ -51,48 +54,7 @@ def count_intersection(pairs, mn, mx):
                     count += 1
     return count
 
-TEST_DATA = '''19, 13, 30 @ -2,  1, -2
-18, 19, 22 @ -1, -1, -2
-20, 25, 34 @ -2, -2, -4
-12, 31, 28 @ -1, -2, -1
-20, 19, 15 @  1, -5, -3'''
-
-print('Testing...')
-lines = [make_two_points(ln) for ln in TEST_DATA.splitlines()]
-test_pairs = combinations(lines, 2)
-print('Part 1:', count_intersection(test_pairs, 7, 27) == 2)
-
-
-with open('inp', mode='r', encoding='utf-8') as inp:
-    print('Solution...')
-    actual_data = inp.read()
-    lines = [make_two_points(ln) for ln in actual_data.splitlines()]
-    #actual_pairs = combinations(lines, 2)
-    #print('Part 1:', count_intersection(actual_pairs, 200000000000000, 400000000000000))
-
-
-'''
-1. sparsuj
-2. zbierz dane  w zbiorze
-
-DLA KAŻDEGO ZESTAWU OFFSETÓW:
-
-1. iteruj przez dane
-    - każdemu dodaj offset
-    - i zrób z nich wektor
-    - i dodaj do zbioru
-
-2. idź przez zbiór
-    - znajdź intersection x i y każdemu z każdym
-    - dodaj intersection do zbioru
-    - jeśli zbiór osiągnie rozmiar > 1: przerwij
-    - jeśli skończysz iść przez zbiór: dodaj intersekcję do zbioru
-
-3. idź przez zbiór intersekcji
-    - dla każdego odcinka policz t, w którym by tam był; potem na tej podstawie oblicz z
-    - jak tylko z okaże się inne (rozmiar zbioru koordów "z" > 1) - przerwij
-    - jak skończyłeś, to tutaj
-'''
+# Part 2 begins, written 10 months after part 1
 
 def parse_coordinates(data):
     coords, delta = data.split(' @ ')
@@ -100,90 +62,45 @@ def parse_coordinates(data):
     dx, dy, dz = [int(d) for d in delta.split(',')]
     return (x, y, z), (dx, dy, dz)
 
-def apply_xy_offset(stones, offset):
-    offset_stones = []
-    for stone in stones:
-        x, y, z = stone[0]
-        dx, dy, dz = stone[1]
-        dx -= offset[0]
-        dy -= offset[1]
-        dz -= offset[2]
-        new_stone = ((x, y, z), (x + dx, y + dy, z + dz))
-        offset_stones.append(new_stone)
-    return offset_stones
 
-def check_xy_intersections(stones):
-    succesful_offsets = set()
-    for x in range(MIN_X,MAX_X+1,1):
-        for y in range(MIN_Y,MAX_Y+1,1):
-            for z in range(MIN_Z,MAX_Z+1,1):
-                offset = (x,y,z)
-                intersections = check_offset(stones, offset)
-                if intersections:
-                    succesful_offsets.add((offset, intersections.pop()))
-    return succesful_offsets
-
-def check_zs(offset, stones):
-    new_stones = apply_xy_offset(stones, offset[0])
-    intersection = offset[1]
-    xs = intersection[0]
-    times = set()
-    for stone in new_stones:
-        x = stone[0][0]
-        dx = stone[1][0] - x
-        z = stone[0][2]
-        dz = stone[1][2] - z
-        t = (xs - x) / dx
-        zs = z + t * dz
-
-        if times and zs not in times:
-            return set()
-        else:
-            times.add(zs)
-    return times
-
-data = TEST_DATA.splitlines()
-data = actual_data.splitlines()
-stones = [parse_coordinates(stone) for stone in data]
-
-from collections import deque
-
-def generate_xy_offsets(MAX_NUM):
+def generate_xy_offsets(max_num):
     visited = set()
     queue = deque([(0, 0)])
     visited.add((0, 0))
-    
+
     while queue:
-        current_tuple = queue.popleft()  
-        yield current_tuple  
-        
+        current_tuple = queue.popleft()
+        yield current_tuple
+
         for i in range(2):
             for delta in [-1, 1]:
                 new_tuple = list(current_tuple)
                 new_tuple[i] += delta
                 new_tuple = tuple(new_tuple)
-                
-                if all(-MAX_NUM <= x <= MAX_NUM for x in new_tuple):
+
+                if all(-max_num <= x <= max_num for x in new_tuple):
                     if new_tuple not in visited:
                         visited.add(new_tuple)
                         queue.append(new_tuple)
 
-def generate_z_offsets(MAX_NUM):
+
+def generate_z_offsets(max_num):
     visited = set()
     queue = deque([0])
     visited.add(0)
-    
+
     while queue:
-        current = queue.popleft()  
+        current = queue.popleft()
         yield current
-        
-        for i in range(2):
+
+        for _ in range(2):
             for delta in [-1, 1]:
                 new_offset = current + delta
-                
-                if -MAX_NUM <= new_offset <= MAX_NUM and new_offset not in visited:
+
+                if -max_num <= new_offset <= max_num and new_offset not in visited:
                     visited.add(new_offset)
                     queue.append(new_offset)
+
 
 def apply_xy_offset(stones, offset):
     offset_stones = []
@@ -195,6 +112,7 @@ def apply_xy_offset(stones, offset):
         new_stone = ((x, y, z), (x + dx, y + dy, z + dz))
         offset_stones.append(new_stone)
     return offset_stones
+
 
 def check_offset(pairs):
     intersections = set()
@@ -204,125 +122,78 @@ def check_offset(pairs):
         else:
             new_intersection = find_intersection(*pair)
             if new_intersection not in intersections and new_intersection is not None:
-                #print(f'UNABLE: {new_intersection} not in {intersections}')
                 return set()
     return intersections
 
-MAX_NUM = 500
-for i, offset in enumerate(generate_xy_offsets(MAX_NUM)):
-    vectors = apply_xy_offset(stones, offset) # apply the offset of dX and dY to each stone -> get list of updates 2D vectors
-    pairs = combinations(vectors, 2) # pair each stone with other stones
-    
-    intersections_2d = check_offset(pairs)
-    
-    if intersections_2d:
-        print(intersections_2d, offset)
-        break
-xs, ys = intersections_2d.pop()
 
-print('int', xs, ys, offset)
+def get_2d_intersection(stones, max_num):
+    for offset in generate_xy_offsets(max_num):
+        # apply the offset of dX and dY to each stone -> get list of updates 2D vectors
+        vectors = apply_xy_offset(stones, offset)
+        # pair each stone with other stones
+        pairs = combinations(vectors, 2)
+        # find 2d intersections first
+        intersections_2d = check_offset(pairs)
+        # if found, return (X, Y) and the updates vectors for stones
+        if intersections_2d:
+            return intersections_2d, vectors
 
-def check_z(dz, vectors):
+
+def find_final_z_position(dz, vectors):
+    # see if stones can be in the same Z at the moment of X, Y intersection
     final_z = None
     for stone in vectors:
         x = stone[0][0]
         dx = stone[1][0] - x
         z = stone[0][2]
         offset_dz = stone[1][2] - stone[0][2] - dz
-        
+
         if dx == 0:
             continue
 
         t = (xs - x) / dx
         calculated_z = z + offset_dz * t
-        
+
         if final_z is None:
             final_z = calculated_z
-            #print('new z', final_z)
-        elif final_z == calculated_z:
-            pass
-            #print('still going', calculated_z)
-        else:
-            #print('stop',calculated_z)
+        elif final_z != calculated_z:
             return None
     return final_z
 
-for dz in generate_z_offsets(MAX_NUM):
-    zs = check_z(dz, vectors)
-    if zs:
-        print(xs, ys, zs, sum((xs, ys, zs)))
-        break
 
-'''
-total = None
-for offset in check_xy_intersections(stones):
-    z = check_zs(offset, stones)
-    if z:
-        total = [*offset[1], z.pop()]
-        print(total, sum(total))
-        break
-if not total:
-    print("No solution")
+def get_zs(vectors, max_num):
+    # check where the Z-start must be for the Z-intersection
+    for dz in generate_z_offsets(max_num):
+        z_start = find_final_z_position(dz, vectors)
+        if z_start:
+            return z_start
 
+TEST_DATA = '''19, 13, 30 @ -2,  1, -2
+18, 19, 22 @ -1, -1, -2
+20, 25, 34 @ -2, -2, -4
+12, 31, 28 @ -1, -2, -1
+20, 19, 15 @  1, -5, -3'''
 
-# potrzebne optymalizacje
-# zacznij od przechodzenia przez same X, Y, potem dopiero Z ???
-# i sprawdz te wzory
-# https://old.reddit.com/r/adventofcode/comments/18pptor/2023_day_24_part_2java_is_there_a_trick_for_this/keps780/?context=3
-# https://www.reddit.com/r/adventofcode/comments/18pnycy/comment/kfjfifl/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-# bruteforce w increasing magnitude
-#
+MAX_NUM = 500
 
+print('Testing...')
+lines = [make_two_points(ln) for ln in TEST_DATA.splitlines()]
+test_pairs = combinations(lines, 2)
+print('Part 1:', count_intersection(test_pairs, 7, 27) == 2)
+hailstones = [parse_coordinates(stone) for stone in TEST_DATA.splitlines()]
+candidate_intersections, hailstone_vectors = get_2d_intersection(hailstones, MAX_NUM)
+xs, ys = candidate_intersections.pop()
+zs = get_zs(hailstone_vectors, MAX_NUM)
+print('Part 2:', int(xs + ys + zs) == 47)
 
-# candidate_coords = lambda limit: [c for row in zip([n for n in range(limit+1)], [-n for n in range(limit+1)]) for c in row]
-
-def get_2d(stones):
-    flat_intersects = set()
-    for x in range(MIN_X,MAX_X+1,1):
-        for y in range(MIN_Y,MAX_Y+1,1):
-            offset = (x,y,0)
-            
-            if x % 100 == 0: print('checking', offset)
-            intersections = check_offset(stones, offset)
-            if intersections:
-                flat_intersects.add((offset, intersections.pop()))
-                continue
-            else:
-                #print('fail')
-                continue
-    return flat_intersects
-
-MIN_X, MAX_X = -500, 500
-MIN_Y, MAX_Y = -500, 500
-MIN_Z, MAX_Z = -5, 5
-
-#data = TEST_DATA.splitlines()
-data = actual_data.splitlines()
-stones = [parse_coordinates(stone) for stone in data]
-#print(get_2d(stones))
-#{((192, 210, 0), (187016878804004.0, 175507140888229.0))}
-
-
-offset = ((192, 210, 0), (187016878804004.0, 175507140888229.0))
-
-three_d_offsets = [((192, 210, z), (187016878804004.0, 175507140888229.0)) for z in range(-500, 500)]
-
-for offset in three_d_offsets:
-    new_stones = apply_xy_offset(stones, offset[0])
-    intersection = offset[1]
-    xs = intersection[0]
-    times = set()
-    for stone in new_stones:
-        x = stone[0][0]
-        dx = stone[1][0] - x
-        z = stone[0][2]
-        dz = stone[1][2] - z
-        t = (xs - x) / dx
-        zs = z + t * dz
-
-        if times and zs not in times:
-            break
-        else:
-            times.add(zs)
-            print(times)
-'''
+with open('inp', mode='r', encoding='utf-8') as inp:
+    print('Solution...')
+    actual_data = inp.read()
+    lines = [make_two_points(ln) for ln in actual_data.splitlines()]
+    actual_pairs = combinations(lines, 2)
+    print('Part 1:', count_intersection(actual_pairs, 200000000000000, 400000000000000))
+    hailstones = [parse_coordinates(stone) for stone in actual_data.splitlines()]
+    candidate_intersections, hailstone_vectors = get_2d_intersection(hailstones, MAX_NUM)
+    xs, ys = candidate_intersections.pop()
+    zs = get_zs(hailstone_vectors, MAX_NUM)
+    print('Part 2:', int(xs + ys + zs))
