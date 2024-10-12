@@ -1,15 +1,15 @@
 # Advent of Code 2023
 
-For the sixth time I'm trying to find out how far I can make it in [Advent of Code](https://adventofcode.com/2023/). Results for previous editions:
+For the sixth time tried to find out how far I can make it in [Advent of Code](https://adventofcode.com/2023/). Results for previous editions:
 * 2018: 9 days
 * 2019: 13 days
 * [2020](https://github.com/Leftfish/Advent-of-Code-2020): 25 days for the first time!
 * [2021](https://github.com/Leftfish/Advent-of-Code-2021): 25 days for the second time!
 * [2022](https://github.com/Leftfish/Advent-of-Code-2022): 25 days for the third time!
 
-The wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/) helped me a lot, once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approaches for Day 20 part 2 (turned out I had a good idea and a stupid implementation error) and Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12. Also, the [discussion](https://old.reddit.com/r/adventofcode/comments/18pptor/2023_day_24_part_2java_is_there_a_trick_for_this/keps780/?context=3) about a brute-force approach and changing the frame of reference helped greatly with Day 24 part 2.
+I made it again, although two puzzles (Day 21 part 2 and Day 24 part 2) waited for months until I got in the mood and found enough time.
 
-As of 5.10.2024: part 2 of Day 21 remains on the to-do list until I get an idea how to approach it. I might need a good tutorial, though...
+Since I'm by no means a professional programmer and I've never studies computer science, a lot of the concepts in AoC are new for me. This is why I'm grateful to the wonderful [AoC community on reddit](https://www.reddit.com/r/adventofcode/), once again. Visualisations on the AoC subreddit pointed me towards the proper algorithm for Day 10 part 2, then debug Day 19. I needed to peek at other participants' attempts to modify Dijkstra's algorithm to solve Day 17, and to change my approaches for Day 20 part 2 (turned out I had a good idea and a stupid implementation error) and Day 22 part 1. Another hint helped me combine Pick's theorem with the shoelace formula for Day 18. I genuinely needed a [tutorial](https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/) to grasp the recursive thinking necessary for Day 12. The [discussion](https://old.reddit.com/r/adventofcode/comments/18pptor/2023_day_24_part_2java_is_there_a_trick_for_this/keps780/?context=3) about a brute-force approach and changing the frame of reference helped greatly with Day 24 part 2. Finally, without [this solution](https://github.com/CalSimmon/advent-of-code/blob/main/2023/day_21/solution.py), [this writeup](https://github.com/derailed-dash/Advent-of-Code/blob/master/src/AoC_2023/Dazbo's_Advent_of_Code_2023.ipynb) and [this tutorial](https://github.com/villuna/aoc23/wiki/A-Geometric-solution-to-advent-of-code-2023,-day-21) I would have just given up on Day 21 part 2.
 
 Things I **L**earned, **R**evised or **I**mproved at in 2023:
 
@@ -33,7 +33,7 @@ Things I **L**earned, **R**evised or **I**mproved at in 2023:
 * [Day 18 Python](18/d18.py): the [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) (**L**) and [Pick's theorem](https://en.wikipedia.org/wiki/Pick%27s_theorem) (**L**)
 * [Day 19 Python](19/d19.py): spotting tree structures (**I**) and traversing them with BFS (**I**), deepcopy (**R**)
 * [Day 20 Python](20/d20.py): creating hashable objects for the original part 1 solution (**R**), itertools.count (**L**) for a proper and simplified solution that got rid of OOP, graphviz (**L**) for a [visualisation](20/machine_vis.png) that helped me figure out how the input works
-* [Day 21 Python](21/d21.py): Dijkstra's algorithm (**R**), part 2 TO DO
+* [Day 21 Python](21/d21.py): Dijkstra's algorithm for succesful but discarded part 1 (**R**), BFS (**R**) and the Three Point Formula (**L**) for the final attempt
 * [Day 22 Python](22/d22.py): defaultdict with a lambda expression in the constructor (**L**), iterative BFS (**R**)
 * [Day 23 Python](23/d23.py) iterative and recursive DFS (**R**), topological sorting (**L**), longest path problem (**L**), working with directed acyclic and cyclic graphs (**I**)
 * [Day 24 Python](24/d24.py): finding line intersections in Euclidean geometry (**R**), combining generators with BFS (**L**)
